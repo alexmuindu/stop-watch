@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stopwatch</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: blue;
+    }
+    .stopwatch {
+        font-size: 2em;
+    }
+    .controls {
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+<h1>Stopwatch</h1>
+<div class="stopwatch">00:00:00</div>
+<div class="controls">
+    <button id="startStopBtn">Start</button>
+    <button id="resetBtn">Reset</button>
+</div>
+<script>
+    let startTime;
+    let running = false;
+    let interval;
+
+    function startStopwatch() {
+        if (!running) {
+            startTime = Date.now();
+            interval = setInterval(updateStopwatch, 1000);
+            running = true;
+            document.getElementById('startStopBtn').textContent = 'Stop';
+        } else {
+            clearInterval(interval);
+            running = false;
+            document.getElementById('startStopBtn').textContent = 'Start';
+        }
+    }
+
+    function updateStopwatch() {
+        let elapsedTime = Date.now() - startTime;
+        let hours = Math.floor(elapsedTime / 3600000);
+        let minutes = Math.floor((elapsedTime % 3600000) / 60000);
+        let seconds = Math.floor((elapsedTime % 60000) / 1000);
+        document.querySelector('.stopwatch').textContent = formatTime(hours) + ':' + formatTime(minutes) + ':' + formatTime(seconds);
+    }
+
+    function formatTime(time) {
+        return time < 10 ? '0' + time : time;
+    }
+
+    function resetStopwatch() {
+        clearInterval(interval);
+        document.querySelector('.stopwatch').textContent = '00:00:00';
+        running = false;
+        document.getElementById('startStopBtn').textContent = 'Start';
+    }
+
+    document.getElementById('startStopBtn').addEventListener('click', startStopwatch);
+    document.getElementById('resetBtn').addEventListener('click', resetStopwatch);
+</script>
+</body>
+</html>
